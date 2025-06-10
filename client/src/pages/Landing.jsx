@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import styles from './Landing.module.css';
 
 function Landing() {
   const features = [
@@ -9,11 +10,12 @@ function Landing() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="py-12 md:py-20">
-          <div className="text-center">
+    <div className="min-h-screen">
+      {/* Hero Section with Gradient */}
+      <div className={styles.heroSection}>
+        <div className={styles.gradientBackground} />
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center py-12 md:py-20">
             <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
               <span className="block">Transform Your</span>
               <span className="block bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
@@ -34,7 +36,10 @@ function Landing() {
             </div>
           </div>
         </div>
+      </div>
 
+      {/* Rest of the content without gradient */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Features Grid */}
         <div id="features" className="py-16">
           <div className="text-center mb-12">
