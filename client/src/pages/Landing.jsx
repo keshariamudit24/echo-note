@@ -36,7 +36,10 @@ export default function Landing() {
             </div>
           </div>
         </div>
+      </div>
 
+      {/* Rest of the content without gradient */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Features Grid */}
         <div id="features" className="py-16">
           <div className="text-center mb-12">
