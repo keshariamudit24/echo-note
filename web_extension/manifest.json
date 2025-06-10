@@ -10,5 +10,9 @@
     "service_worker": "background.js"
   },
   "permissions": ["storage"],
-  "host_permissions": ["https://echonote.in/*"]
+  "host_permissions": ["http://localhost:5173/"],
+  "externally_connectable": {
+  "matches": ["http://localhost:5173/"]
+}
+  
 }
