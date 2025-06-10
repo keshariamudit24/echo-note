@@ -1,10 +1,23 @@
 import { useUser } from "@clerk/clerk-react";
+import SetUserCookie from '../components/SetUserCookie';
 
 function Dashboard() {
-  const { user } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
+
+  if (!isLoaded) {
+    // Handle loading state
+    return <div className="flex items-center justify-center min-h-screen">Loading dashboard...</div>;
+  }
+
+  // If the user is not signed in (should be caught by RedirectToSignIn in App.jsx, but good for robustness)
+  if (!isSignedIn) {
+    return <div className="flex items-center justify-center min-h-screen">Please sign in to view the dashboard.</div>;
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Set the user cookies as soon as the dashboard loads and user is signed in */}
+      {/* <SetUserCookie /> */}
       <h1 className="text-3xl font-bold text-gray-900">
         Welcome, {user.firstName || user.emailAddresses[0].emailAddress}
       </h1>
