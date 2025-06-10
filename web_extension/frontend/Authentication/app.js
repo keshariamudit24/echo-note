@@ -1,25 +1,16 @@
-function redirectToSignin() {
- // Replace this URL with your actual sign-in page
-const signinUrl = 'https://your-website.com/signin';            
-// For browser extension, you would typically use:
-// chrome.tabs.create({ url: signinUrl });            
-// For testing in browser, use:
-window.open(signinUrl, '_blank');
-}
-
-// Add some interactive effects
-document.addEventListener('DOMContentLoaded', function() {
-// Add event listener to sign-in button
-    const signinButton = document.getElementById('signinButton');
-    if (signinButton) {
-    signinButton.addEventListener('click', redirectToSignin);
-    }
-                
-    const features = document.querySelectorAll('.feature-icon');
-                
-    // Stagger animation for features
-    features.forEach((feature, index) => {
-        feature.style.animation = `fadeIn 0.5s ease forwards ${index * 0.1}s`;
-        feature.style.opacity = '0';
-    });
+document.getElementById("signinButton").addEventListener("click", () => {
+  // Open your website where Clerk React handles sign in
+  chrome.tabs.create({ url: "https://echonote.in" });
 });
+
+// Poll every 2 seconds to check if user has logged in
+const intervalId = setInterval(() => {
+  chrome.storage.local.get("clerkSession", (result) => {
+    const session = result.clerkSession;
+
+    if (session && session.userId) {
+      clearInterval(intervalId); // stop polling
+      window.location.href = "../dashBoard/dashBoard.html";
+    }
+  });
+}, 2000);
