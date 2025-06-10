@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo Note Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-pattern"></div>
+    
+    <button class="logout-button" onclick="logout()">Sign Out</button>
+    
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div class="dashboard-logo"></div>
+            <h1 class="dashboard-title">Echo Note</h1>
+            <p class="user-welcome">Welcome back, <span class="user-name" id="userName">Alex Johnson</span>!</p>
+        </div>
+
+        <div class="dashboard-actions">
+            <button class="action-button record-button" id="recordButton" onclick="toggleRecording()">
+                <span class="button-icon" id="recordIcon">🔴</span>
+                <span id="recordText">Start Full Screen Recording</span>
+            </button>
+            
+            <button class="action-button website-button" onclick="visitWebsite()">
+                <span class="button-icon">🌐</span>
+                Visit Website
+            </button>
+        </div>
+
+        <div class="status-indicator" id="statusIndicator">
+            <div class="status-dot"></div>
+            <span id="statusText">Ready to record</span>
+        </div>
+    </div>
+    
+    <div class="version">v1.0</div>
+
+    <script src="app.js">
+        
+    </script>
+</body>
+</html>
