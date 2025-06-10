@@ -1,6 +1,6 @@
 document.getElementById("signinButton").addEventListener("click", () => {
   // Open your website where Clerk React handles sign in
-  chrome.tabs.create({ url: "https://echonote.in" });
+  chrome.tabs.create({ url: "http://localhost:5173/" });
 });
 
 // Poll every 2 seconds to check if user has logged in
