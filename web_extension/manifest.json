@@ -9,7 +9,10 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["storage"],
+  "permissions": [
+    "cookies", 
+    "storage" 
+  ],
   "host_permissions": ["http://localhost:5173/"],
   "externally_connectable": {
   "matches": ["http://localhost:5173/"]
