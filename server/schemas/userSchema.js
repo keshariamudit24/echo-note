@@ -47,6 +47,7 @@ userSchema.statics.createFromClerk = async function(clerkUser) {
 
 // create models
 const UserModel = mongoose.model("user", userSchema);
+const ScreenshotModel = mongoose.model("screenshot", screenshotSchema)
 
 // export 
 module.exports = UserModel

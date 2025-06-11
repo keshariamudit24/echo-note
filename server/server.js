@@ -11,7 +11,10 @@ const requireAuth = require('./middlewares/authMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const userRoute = require('./Routes/userRoute')
+const userRoute = require('./Routes/userRoute');
+const extRoute = require("./Routes/extensionRoute");
+const authRoute = require('./Routes/authRoute')
+const requireAuth = require('./middlewares/authMiddleware');
 
 app.use(cors({
   origin: ['http://localhost:5173', 'chrome-extension://fcanbnopnhklpjfhpmpgmgpkigdnbleh'],
@@ -23,6 +26,10 @@ app.use('/user', userRoute)
 app.use('/extension', extRoute)
 app.use('/auth', authRoute)
 app.use('/screenshot', imgOcr)
+
+app.use('/user', requireAuth, userRoute)
+app.use('/extension', requireAuth, extRoute)
+app.use('/auth', authRoute)
 
 mongoose.connect(process.env.MONGODB_URL)
     .then(() => app.listen(PORT, () => { console.log(`listening on port: ${PORT}...`) }))
