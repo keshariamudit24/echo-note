@@ -1,5 +1,3 @@
-
-
 export async function uploadScreenShot(base64Image, userEmail, sessionId) {
 
     const payload = {
