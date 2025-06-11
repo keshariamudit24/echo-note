@@ -1,9 +1,30 @@
 const express = require('express');
 const expressAsyncHandler = require('express-async-handler')
 const {UserModel} = require('../schemas/userSchema')
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 const imgOcr = express.Router();
 const axios = require('axios')
 require('dotenv').config();
+
+// Initialize Gemini
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+
+// Function to get summary from Gemini
+async function getGeminiSummary(text) {
+  // For text-only input, use the gemini-pro model
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+  const prompt = `Please provide a concise summary of the following text. Focus on the key points and main ideas: \n\n${text}`;
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Error getting Gemini summary:", error);
+    throw error;
+  }
+}
 
 async function sendImageToOCRSpace(base64Str) {
   // console.log(base64Str);
@@ -43,19 +64,22 @@ imgOcr.post('/ocr', expressAsyncHandler(async (req, res) => {
 
     // perform OCR
     const ocrData = await sendImageToOCRSpace(image);
+    const extractedText = ocrData.ParsedResults[0].ParsedText;
+
+    // Get Gemini summary
+    const summary = await getGeminiSummary(extractedText);
 
     // store the summary in the database 
     const targetSession = currUser.session.id(sessionId);
-
     if (!targetSession) {
         return res.status(404).send({ msg: 'Session not found' });
     }
+    
     console.log(ocrData);
-    targetSession.summary = ocrData.ParsedResults[0].ParsedText;
+    targetSession.summary = summary
 
     // Save the changes
     await currUser.save();
-
     res.status(200).send({ msg: "Summary added to session", sessionId });
 }))
 
