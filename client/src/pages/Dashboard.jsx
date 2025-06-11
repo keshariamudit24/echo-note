@@ -17,7 +17,7 @@ function Dashboard() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Set the user cookies as soon as the dashboard loads and user is signed in */}
-      {/* <SetUserCookie /> */}
+      <SetUserCookie />
       <h1 className="text-3xl font-bold text-gray-900">
         Welcome, {user.firstName || user.emailAddresses[0].emailAddress}
       </h1>
