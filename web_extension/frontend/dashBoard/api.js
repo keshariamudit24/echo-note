@@ -1,4 +1,4 @@
-// api.js
+
 
 export async function uploadScreenShot(base64Image, userEmail, sessionId) {
 
