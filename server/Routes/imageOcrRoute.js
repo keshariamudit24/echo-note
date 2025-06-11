@@ -1,11 +1,14 @@
 const express = require('express');
 const expressAsyncHandler = require('express-async-handler')
-const UserModel = require('../schemas/userSchema')
+const {UserModel} = require('../schemas/userSchema')
 const imgOcr = express.Router();
 const axios = require('axios')
+require('dotenv').config();
 
 async function sendImageToOCRSpace(base64Str) {
-  const apiKey = 'K84162663888957'; // replace with your OCR.space API key
+  // console.log(base64Str);
+  const apiKey = process.env.API_KEY; // replace with your OCR.space API key
+  // console.log("API KEY: ", apiKey);
   const base64ImageWithPrefix = `data:image/png;base64,${base64Str}`;
 
   const data = new URLSearchParams();
@@ -34,12 +37,12 @@ async function sendImageToOCRSpace(base64Str) {
 
 imgOcr.post('/ocr', expressAsyncHandler(async (req, res) => {
     // take the input
-    const { image, title, time, userEmail, sessionId } = req.body;
+    const { image, userEmail, sessionId } = req.body;
     // find the user having this userEmail
     const currUser = await UserModel.findOne({ email: userEmail });
 
     // perform OCR
-    const ocrData = sendImageToOCRSpace(image);
+    const ocrData = await sendImageToOCRSpace(image);
 
     // store the summary in the database 
     const targetSession = currUser.session.id(sessionId);
@@ -47,7 +50,7 @@ imgOcr.post('/ocr', expressAsyncHandler(async (req, res) => {
     if (!targetSession) {
         return res.status(404).send({ msg: 'Session not found' });
     }
-
+    console.log(ocrData);
     targetSession.summary = ocrData.ParsedResults[0].ParsedText;
 
     // Save the changes
