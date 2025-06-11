@@ -11,6 +11,7 @@ const requireAuth = require('./middlewares/authMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+const userRoute = require('./Routes/userRoute')
 
 app.use(cors({
   origin: ['http://localhost:5173', 'chrome-extension://fcanbnopnhklpjfhpmpgmgpkigdnbleh'],
