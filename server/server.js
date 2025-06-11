@@ -23,7 +23,6 @@ app.use('/extension', extRoute)
 app.use('/auth', authRoute)
 app.use('/screenshot', imgOcr)
 
-
 mongoose.connect(process.env.MONGODB_URL)
     .then(() => app.listen(PORT, () => { console.log(`listening on port: ${PORT}...`) }))
     .catch()
