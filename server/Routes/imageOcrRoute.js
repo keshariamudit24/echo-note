@@ -7,14 +7,14 @@ const axios = require('axios')
 require('dotenv').config();
 
 // Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API);
 
 // Function to get summary from Gemini
 async function getGeminiSummary(text) {
   // For text-only input, use the gemini-pro model
   const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-  const prompt = `Please provide a concise summary of the following text. Focus on the key points and main ideas: \n\n${text}`;
+  const prompt = `This is a project for visually impaired people for them to use during online sessions to avoid strain on their eyes. The following is raw text extracted using OCR from a classroom whiteboard/notes/document. It may contain irrelevant characters or small OCR errors. Please summarize the key ideas clearly and concisely. Focus on the main points, definitions, formulas, or steps. Ignore random symbols or formatting issues. Here's the text:  \n\n${text}`;
 
   try {
     const result = await model.generateContent(prompt);
