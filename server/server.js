@@ -13,7 +13,11 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(cors({
+<<<<<<< HEAD
   origin: ['http://localhost:5173', 'chrome-extension://hfdkkflnkbflkdfanmngjkjiadiihhed'],
+=======
+  origin: ['http://localhost:5173', 'chrome-extension://fcanbnopnhklpjfhpmpgmgpkigdnbleh'],
+>>>>>>> 52cf56d75c4bbc54bbec3c295dd3911dfb1fbb1b
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));

@@ -1,17 +1,17 @@
 // api.js
 
-export async function uploadScreenShot(base64Image, userEmail, sessionId) {
+export async function uploadScreenShot(base64Image, title, timestamp, userEmail, sessionId) {
 
     const payload = {
         image: base64Image,
+        title: title,
+        time: timestamp,
         userEmail: userEmail,
         sessionId: sessionId
     };
 
-    console.log("Session Id in api",payload.sessionId);
-
     console.log("Uploading screenshot");
-    const response = await fetch('http://localhost:3000/screenshot/ocr', {
+    const response = await fetch('https://your-backend-api.com/upload-screenshot', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -21,37 +21,25 @@ export async function uploadScreenShot(base64Image, userEmail, sessionId) {
     if (!response.ok) {
         throw new Error('Failed to upload screenshot', response.json());
     }
-    else{
-        console.log("Image uploaded");
-    }
     return await response.json();
 }
 
-export async function getSessionId(userEmail, title) {
-    const payload = {
+export async function getSessionId(userEmail,title){
+    const payload={
         userEmail: userEmail,
         title: title,
-    };
-
-    try {
-        const response = await fetch('http://localhost:3000/extension/api/session-id', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Successfully fetched session Id:', data);
-            return data.payload?.sessionId || null;
-        } else {
-            console.warn('Failed to fetch session ID:', response.status);
-            return null;
-        }
-    } catch (error) {
-        console.error('Error while fetching session ID:', error);
-        return null;
     }
-}
+    console.log("fetching session Id");
+    const response=await fetch('',{
+        method:'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
+
+    if(response.status==200){
+        console.log('Successfully fetched session Id: ', await response.json());
+    }
+    return await response.json();
+};
