@@ -1,162 +1,5 @@
-import { uploadScreenShot } from './api.js';
+import { uploadScreenShot,getSessionId } from './api.js';
 
-
-// //video
-// const recordButton = document.getElementById('recordButton');
-
-// recordButton.addEventListener('click', () => {
-//     toggleRecording();
-// });
-
-// const titleInput = document.getElementById('recordingTitle');
-
-// titleInput.addEventListener('input', () => {
-//     const title = titleInput.value.trim();
-//     recordButton.disabled = title === '';
-// });
-
-
-// let isRecording = false;
-// let recordingStartTime = null;
-// let recordingTimer = null;
-// let userName, userEmail;
-
-// async function initializeDashboard() {
-//     const result = await chrome.storage.local.get(['loggedInUserName', 'loggedInUserEmail']);
-//     userName = decodeURIComponent(result.loggedInUserName);
-//     userEmail = decodeURIComponent(result.loggedInUserEmail);
-//     const userData = {
-//         name: userName,
-//         email: userEmail
-//     };
-//     document.getElementById('userName').textContent = userData.name;
-//     console.log(userData);
-// }
-
-// initializeDashboard();
-
-// let mediaRecorder;
-// let recordedChunks = [];
-
-// // Timer
-// let timerInterval = null;
-// let startTime = null;
-
-// // UI references
-// const recordIcon = document.getElementById('recordIcon');
-// const recordText = document.getElementById('recordText');
-// const statusText = document.getElementById('statusText');
-// const statusDot = document.querySelector('.status-dot');
-// const timerDisplay = document.getElementById('recordingTimer');
-// const timerText = document.getElementById('timerText');
-
-// function updateUi(recording) {
-//     if (recording) {
-//         recordIcon.textContent = '⏹️';
-//         recordText.textContent = 'Stop Recording';
-//         statusText.textContent = 'Recording...';
-//         statusDot.style.backgroundColor = 'red';
-//         timerDisplay.style.display = 'block';
-//     } else {
-//         recordIcon.textContent = '🔴';
-//         recordText.textContent = 'Start Full Screen Recording';
-//         statusText.textContent = 'Recording stopped';
-//         statusDot.style.backgroundColor = 'gray';
-//         timerDisplay.style.display = 'none';
-//         timerText.textContent = '00:00';
-//     }
-// }
-
-// function updateTimer() {
-//     const elapsedMs = Date.now() - startTime;
-//     const totalSeconds = Math.floor(elapsedMs / 1000);
-//     const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-//     const seconds = String(totalSeconds % 60).padStart(2, '0');
-//     timerText.textContent = `${minutes}:${seconds}`;
-// }
-
-// function updateTitleField(isRecording){
-//     if(isRecording){
-//         //disable ediditing
-//         titleInput.disabled = true;
-//     }
-//     else{
-//         titleInput.disabled = false;
-//         titleInput.value = '';
-//         recordButton.disabled = true;
-//     }
-// }
-
-// async function toggleRecording() {
-//     const title = titleInput.value.trim();
-//     if (!title) {
-//         alert("Please enter a valid recording title.");
-//         return;
-//     }
-
-//     if (!isRecording) {
-//         try {
-//             const stream = await navigator.mediaDevices.getDisplayMedia({
-//                 video: true
-//             });
-
-//             mediaRecorder = new MediaRecorder(stream);
-//             recordedChunks = [];
-
-//             mediaRecorder.ondataavailable = (e) => {
-//                 if (e.data.size > 0) recordedChunks.push(e.data);
-//             };
-
-//             mediaRecorder.onstop = () => {
-//                 clearInterval(timerInterval);
-//                 const blob = new Blob(recordedChunks, { type: "video/webm" });
-//                 const url = URL.createObjectURL(blob);
-
-//                 const a = document.createElement('a');
-//                 a.href = url;
-//                 a.download = `${title.replace(/\s+/g, '_')}.webm`;// title for the video
-//                 a.click();
-
-//                 URL.revokeObjectURL(url);
-//                 updateUi(false);
-//                 updateTitleField(false);
-//             };
-
-//             // Handle Chrome's "Stop Sharing" button
-//             stream.getVideoTracks()[0].onended = () => {
-//                 if (isRecording) {
-//                     mediaRecorder.stop();
-//                     isRecording = false;
-//                     clearInterval(timerInterval);
-//                     updateUi(false);
-//                     updateTitleField(false);
-//                 }
-//             };
-
-//             mediaRecorder.start();
-//             isRecording = true;
-//             startTime = Date.now();
-//             updateUi(true);
-//             updateTitleField(true);
-//             updateTimer(); // Show 00:00 immediately
-//             timerInterval = setInterval(updateTimer, 1000);
-
-//         } catch (err) {
-//             console.error("Error accessing display media:", err);
-//             alert("Failed to start screen recording.");
-//         }
-//     } else {
-//         mediaRecorder.stop();
-//         isRecording = false;
-//         clearInterval(timerInterval);
-//         mediaRecorder.stream.getTracks().forEach(track => track.stop());
-//         updateUi(false);
-//         updateTitleField(false);
-//     }
-// }
-
-
-//video
 const recordButton = document.getElementById('recordButton');
 
 recordButton.addEventListener('click', () => {
@@ -250,10 +93,10 @@ async function toggleRecording() {
 
     if(!sessionId){
         //fetch sessio id using email
-        
+        sessionId = await getSessionId(userEmail,titleInput.value);
     }
 
-    if (!isRecording) {
+    if (!isRecording && sessionId) {
         try {
             captureStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
             isRecording = true;
@@ -271,12 +114,12 @@ async function toggleRecording() {
 
             video.addEventListener('loadedmetadata', () => {
                 // First screenshot after video is ready
-                captureScreenshot(video, title, Date.now());
+                captureScreenshot(video,userEmail,sessionId);
                 
                 // Start interval for repeated screenshots
                 screenshotInterval = setInterval(() => {
-                    captureScreenshot(video, title, Date.now());
-                }, 2000);
+                    captureScreenshot(video,userEmail,sessionId);
+                }, 5000);
             });
 
             // Stop when screen sharing is ended manually
@@ -289,7 +132,7 @@ async function toggleRecording() {
             alert("Failed to start screen capture.");
         }
 
-    } else {
+    } else if(sessionId){
         stopRecordingScreenshots();
     }
 }
@@ -317,7 +160,7 @@ async function toggleRecording() {
 //     }, 'image/png');
 // }
 
-function captureScreenshot(videoElement, title, userEmail, sessionId) {
+function captureScreenshot(videoElement, userEmail, sessionId) {
     const canvas = document.createElement('canvas');
     canvas.width = videoElement.videoWidth;
     canvas.height = videoElement.videoHeight;
@@ -331,10 +174,11 @@ function captureScreenshot(videoElement, title, userEmail, sessionId) {
                 const reader = new FileReader();
                 reader.onloadend = () => {
                     const base64Image = reader.result.split(',')[1]; // remove data:image/png;base64,
-                    const timestamp = new Date().toISOString();
+                    // const timestamp = new Date().toISOString();
 
                     // Call your custom function
-                    uploadScreenShot(base64Image, title, timestamp, userEmail, sessionId);
+                    console.log("Session Id before uploading",sessionId);
+                    uploadScreenShot(base64Image,userEmail, sessionId);
                 };
                 if (blob) {
                     reader.readAsDataURL(blob);
