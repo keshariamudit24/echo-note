@@ -18,7 +18,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/user', requireAuth, userRoute)
-app.use('/extension', requireAuth, extRoute)
+app.use('/extension', extRoute)
 app.use('/auth', authRoute)
 
 mongoose.connect(process.env.MONGODB_URL)
