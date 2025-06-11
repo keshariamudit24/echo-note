@@ -239,12 +239,18 @@ function updateTitleField(isRecording){
 
 let screenshotInterval = null;
 let captureStream = null;
+let sessionId=null;
 
 async function toggleRecording() {
     const title = titleInput.value.trim();
     if (!title) {
         alert("Please enter a valid recording title.");
         return;
+    }
+
+    if(!sessionId){
+        //fetch sessio id using email
+        
     }
 
     if (!isRecording) {
