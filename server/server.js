@@ -1,17 +1,26 @@
 const express = require("express")
 const mongoose = require('mongoose');
+const cors = require('cors');
 require('dotenv').config();
+
 const app = express();
 const PORT = process.env.PORT || 4000;
-const userRoute = require('./Routes/userRoute')
+const userRoute = require('./Routes/userRoute');
+const extRoute = require("./Routes/extensionRoute");
+const authRoute = require('./Routes/authRoute')
+const requireAuth = require('./middlewares/authMiddleware');
 
+app.use(cors({
+  origin: ['http://localhost:5173', 'chrome-extension://fcanbnopnhklpjfhpmpgmgpkigdnbleh'],
+  credentials: true
+}));
 app.use(express.json());
+
+app.use('/user', requireAuth, userRoute)
+app.use('/extension', requireAuth, extRoute)
+app.use('/auth', authRoute)
 
 mongoose.connect(process.env.MONGODB_URL)
     .then(() => app.listen(PORT, () => { console.log(`listening on port: ${PORT}...`) }))
     .catch()
-
-app.use("/user", userRoute);
-    
-
 
