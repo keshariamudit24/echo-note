@@ -16,7 +16,7 @@ app.use(cors({
   origin: ['http://localhost:5173', 'chrome-extension://fcanbnopnhklpjfhpmpgmgpkigdnbleh'],
   credentials: true
 }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 app.use('/user', requireAuth, userRoute)
 app.use('/extension', extRoute)
