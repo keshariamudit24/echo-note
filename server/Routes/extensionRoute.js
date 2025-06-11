@@ -1,18 +1,29 @@
 const express = require('express');
 const extRoute = express.Router();
 const expressAsyncHandler = require('express-async-handler');
-const ScreenshotSchema = require('../schemas/userSchema')
+const userSchema = require('../schemas/userSchema');
+const { users } = require('@clerk/clerk-sdk-node');
 
-extRoute.post('/api/screenshot', expressAsyncHandler(async (req, res) => {
-  const { image, timestamp, userId } = req.body;
 
-  await ScreenshotSchema.create({
-    userId,
-    timestamp,
-    image
+extRoute.get('/api/session-id', expressAsyncHandler(async (req, res) => {
+  const { userEmail, title } = req.body;
+  // create a new session for this user 
+  // -> find the user using the emailId
+  const currUser = await userSchema.findOne({ email: userEmail});
+  // -> create a new session
+  await currUser.session.push({
+    title,
+    date: Date.now(),
+  })
+  await currUser.save()
+
+  // return the sessionId
+  const newSession = currUser.session[currUser.session.length - 1]; // ✅ get last session
+
+  res.status(201).send({
+    msg: "session created",
+    payload: { sessionId: newSession._id }
   });
-
-  res.status(200).json({ message: "Screenshot saved" });
 }));
 
 module.exports = extRoute
