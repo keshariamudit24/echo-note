@@ -3,12 +3,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-const app = express();
-const PORT = process.env.PORT || 4000;
 const userRoute = require('./Routes/userRoute');
 const extRoute = require("./Routes/extensionRoute");
 const authRoute = require('./Routes/authRoute')
 const requireAuth = require('./middlewares/authMiddleware');
+
+const app = express();
+const PORT = process.env.PORT || 4000;
 
 app.use(cors({
   origin: ['http://localhost:5173', 'chrome-extension://fcanbnopnhklpjfhpmpgmgpkigdnbleh'],
