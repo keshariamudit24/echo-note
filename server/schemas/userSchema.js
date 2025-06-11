@@ -1,15 +1,29 @@
 const mongoose = require('mongoose');
 
-// define the Schema 
+// define the Schemas
+
+const screenshotSchema = new mongoose.Schema({
+  userId: String,
+  timestamp: Date,
+  image: String 
+});
+
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: [true, 'Email is required'],
+        unique: true,
+        trim: true,
+        lowercase: true
     },
-    firstName:{
+    firstName: {
         type: String,
-        required: true
+        required: [true, 'First name is required'],
+        trim: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     },
     session: [
         {
@@ -21,10 +35,28 @@ const userSchema = new mongoose.Schema({
             summary: String
         }
     ]
-}, {strict: "throw"});
+}, { 
+    strict: "throw",
+    timestamps: true 
+});
 
-// create a model
+userSchema.statics.createFromClerk = async function(clerkUser) {
+    return this.findOneAndUpdate(
+        { email: clerkUser.email },
+        {
+            email: clerkUser.email,
+            firstName: clerkUser.firstName,
+        },
+        { upsert: true, new: true }
+    );
+};
+
+// create models
 const UserModel = mongoose.model("user", userSchema);
+const ScreenshotModel = mongoose.model("screenshot", screenshotSchema)
 
-// export it 
-module.exports = UserModel; 
+// export 
+module.exports = {
+    UserModel,
+    ScreenshotModel
+};

@@ -32,60 +32,42 @@
 
 import React, { useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
-import Cookies from 'js-cookie'; 
+import Cookies from 'js-cookie';
 
-/**
- * SetUserCookie Component
- * This component handles setting and clearing user cookies based on Clerk's
- * authentication state (isSignedIn and user object availability).
- *
- * It sets cookies upon successful sign-in and clears them upon sign-out.
- * Make sure to install 'js-cookie': `npm install js-cookie` or `yarn add js-cookie`
- */
 const SetUserCookie = () => {
   const { user, isSignedIn } = useUser();
 
   useEffect(() => {
-    if (isSignedIn && user) {
-      // --- Logic for Setting Cookies (when signed in) ---
-      const userEmail = user.primaryEmailAddress?.emailAddress;
-      // Get the full name, or fallback to username, or email if name isn't available
-      const userName = user.fullName || user.username || user.primaryEmailAddress?.emailAddress;
+    const saveUserToDatabase = async () => {
+      // Only proceed if user is signed in and we have user data
+      if (isSignedIn && user) {
+        try {
+          // Send only email and firstName to the database
+          const response = await fetch('http://localhost:3000/auth/signup', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: user.primaryEmailAddress?.emailAddress,
+              firstName: user.firstName
+            })
+          });
 
-      if (userEmail) {
-        // Set the 'my_app_user_email' cookie
-        // 'expires': Sets the cookie to expire in 7 days. Adjust as needed.
-        // 'secure': CRUCIAL for production. Ensures cookie is only sent over HTTPS.
-        //           Your Clerk app MUST be served over HTTPS for this to work correctly.
-        // 'sameSite': 'Lax' is a good default for security. It sends cookies
-        //             on cross-site requests if they are top-level navigations.
-        Cookies.set('my_app_user_email', userEmail, { expires: 7, secure: true, sameSite: 'Lax' });
-        
-        // Set the 'my_app_user_name' cookie
-        // Use encodeURIComponent to handle special characters in names
-        Cookies.set('my_app_user_name', encodeURIComponent(userName), { expires: 7, secure: true, sameSite: 'Lax' });
-        
-        console.log('User email and name cookies set successfully!');
-      } else {
-        console.warn('User email not available, unable to set cookies.');
+          if (response.ok) {
+            console.log('User saved to database successfully');
+          } else {
+            console.error('Failed to save user to database');
+          }
+        } catch (error) {
+          console.error('Error saving user:', error);
+        }
       }
-    } else if (!isSignedIn) {
-      // --- Logic for Clearing Cookies (when signed out) ---
-      // This block will execute when the user is no longer signed in.
-      console.log('User signed out. Clearing custom cookies...');
-      Cookies.remove('my_app_user_email');
-      Cookies.remove('my_app_user_name');
-      console.log('Custom cookies cleared.');
+    };
 
-      // You might also want to clear data from the extension's local storage here
-      // though the extension's popup.js and dashboard.js also handle this on their side.
-      // This ensures consistency across the web app and extension.
-      // await chrome.storage.local.remove(['loggedInUserEmail', 'loggedInUserName']);
-      // console.log("Cleared user data from extension storage.");
-    }
-  }, [isSignedIn, user]); // Dependency array: Effect runs when isSignedIn or user object changes
+    saveUserToDatabase();
+  }, [isSignedIn, user]);
 
-  // This component does not render any visible UI
   return null;
 };
 
