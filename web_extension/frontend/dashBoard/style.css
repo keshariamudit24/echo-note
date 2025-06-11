@@ -233,21 +233,23 @@ body {
     opacity: 0.6;
 }
 
-.logout-button {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: transparent;
-    border: none;
-    color: var(--primary-blue);
-    font-size: 12px;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background-color: gray;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
 }
 
-.logout-button:hover {
-    background: rgba(100, 149, 237, 0.1);
-    color: var(--dark-blue);
+.title-input-container {
+    margin-bottom: 10px;
+}
+
+#recordingTitle {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
