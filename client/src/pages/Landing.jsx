@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './Landing.module.css';
 
-function Landing() {
+export default function Landing() {
   const features = [
     { title: 'Smart Recording', icon: '🎥', description: 'Record your meetings with a single click' },
     { title: 'AI Summaries', icon: '🤖', description: 'Get instant AI-powered meeting summaries' },
