@@ -1,4 +1,4 @@
-import summarizeData, { uploadScreenShot,getSessionId } from './api.js';
+import { summarizeData, uploadScreenShot,getSessionId } from './api.js';
 
 const recordButton = document.getElementById('recordButton');
 
@@ -210,13 +210,13 @@ async function stopRecordingScreenshots() {
 
     // you want the summary to be stored in the db
     // post
-    try {
-        await summarizeData(userEmail, sessionId);
-        console.log('Recording session ended successfully');
-        sessionId = null;
-    } catch (error) {
-        console.error('Failed to end recording session:', error);
-        alert('Error saving recording session');
-    }
+    // try {
+    //     summarizeData(userEmail, sessionId);
+    //     console.log('Recording session ended successfully');
+    //     sessionId = null;
+    // } catch (error) {
+    //     console.error('Failed to end recording session:', error);
+    //     alert('Error saving recording session');
+    // }
 }
 

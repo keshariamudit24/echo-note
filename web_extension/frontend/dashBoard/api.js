@@ -57,7 +57,7 @@ export async function getSessionId(userEmail, title) {
     }
 }
 
-    export async function summarizeData(userEmail, sessionId){
+export async function summarizeData(userEmail, sessionId){
     try {
         // post request
         const response = await fetch('http://localhost:3000/extension/summary/final', {
