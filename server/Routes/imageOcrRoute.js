@@ -31,7 +31,6 @@ async function getGeminiSummary(text) {
 async function sendImageToOCRSpace(base64Str) {
   console.log("In ocr func");
   const apiKey = process.env.API_KEY; // replace with your OCR.space API key
-  console.log("API KEY: ", apiKey);
   const base64ImageWithPrefix = `data:image/png;base64,${base64Str}`;
 
   const data = new URLSearchParams();
@@ -50,7 +49,7 @@ async function sendImageToOCRSpace(base64Str) {
     });
 
     // OCR result JSON:
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
 
   } catch (error) {
@@ -63,7 +62,7 @@ imgOcr.post('/ocr', expressAsyncHandler(async (req, res) => {
     // take the input
     console.log("request received");
     const { image, userEmail, sessionId } = req.body;
-    console.log("Request body: ", req.body);
+    // console.log("Request body: ", req.body);
 
     console.log("Session Id: ",sessionId)
     // find the user having this userEmail
@@ -77,10 +76,10 @@ imgOcr.post('/ocr', expressAsyncHandler(async (req, res) => {
     console.log(extractedText);
 
     // Get Gemini summary
-    console.log("gpt start");
-    const summary = await getGeminiSummary(extractedText);
-    console.log("gpt end");
-    console.log("Summary: ",summary);
+    // console.log("gpt start");
+    // const summary = await getGeminiSummary(extractedText);
+    // console.log("gpt end");
+    // console.log("Summary: ",summary);
 
 
     // store the summary in the database 
@@ -89,8 +88,8 @@ imgOcr.post('/ocr', expressAsyncHandler(async (req, res) => {
         return res.status(404).send({ msg: 'Session not found' });
     }
     
-    // console.log(ocrData);
-    targetSession.summary += summary
+    console.log(extractedText);
+    targetSession.summary += extractedText
 
     // Save the changes
     await currUser.save();
