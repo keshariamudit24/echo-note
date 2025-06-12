@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Link } from 'react-router-dom';
 import styles from './Landing.module.css';
 
@@ -95,8 +96,25 @@ function Landing() {
           </div>
         </div>
       </div>
+=======
+function Landing() {
+  return (
+    <div className="landing">
+      <section className="hero">
+        <h1>Transform Your Online Meetings into Smart Notes</h1>
+        <p>Record, transcribe, and summarize your meetings automatically</p>
+        <div className="cta-buttons">
+          <button className="primary">Get Started</button>
+          <button className="secondary">Learn More</button>
+        </div>
+      </section>
+>>>>>>> 16d4203 (structure of landing page)
     </div>
   );
 }
 
+<<<<<<< HEAD
 export default Landing;
+=======
+export default Landing;
+>>>>>>> 16d4203 (structure of landing page)

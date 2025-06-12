@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+<<<<<<< HEAD
 import { ClerkProvider, SignIn, SignUp, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
@@ -54,6 +55,25 @@ function App() {
       </Router>
     </ClerkProvider>
   )
+=======
+import Landing from './pages/Landing';
+import Dashboard from './pages/Dashboard';
+import Navbar from './components/Navbar';
+import './App.css';
+
+function App() {
+  return (
+    <Router>
+      <div className="app">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+>>>>>>> 16d4203 (structure of landing page)
 }
 
 export default App;
