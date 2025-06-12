@@ -11,7 +11,7 @@ async function getGeminiSummary(text) {
   console.log("requesting gemini");
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-  const prompt = `The input text below contains many rewritten sentences and redundant information. Go through it carefully and generate a concise and clear summary, removing all repetitions and redundancies. Focus only on the essential points and present them once in a well-structured format. Here's the text:  \n\n${text}`;
+  const prompt = `The input text below contains many rewritten sentences and redundant information. Go through it carefully and generate a concise and clear summary, removing all repetitions and redundancies. Focus only on the essential points and present them once in a well-structured format i.e Headings, side-headings, paragraphs, bullet points, conclusion. Here's the text:  \n\n${text}`;
 
   try {
     const result = await model.generateContent(prompt);
@@ -45,6 +45,7 @@ extRoute.post('/api/session-id', expressAsyncHandler(async (req, res) => {
     // Push session data into session array
     const sessionObj = {
       title,
+      finalSummary: false,
       date: new Date()
     };
 

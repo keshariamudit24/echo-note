@@ -4,6 +4,7 @@ import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import Navbar from './components/Navbar';
 import { SetUserCookie,ClearUserCookie } from './components/cookieFunctions';
+import { CreateOrCheckUser } from './components/CreateorCheckUser'
 
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -16,6 +17,7 @@ export default function App() {
             <Navbar />
             <SignedIn>
               <SetUserCookie />
+              <CreateOrCheckUser />
             </SignedIn>
             <SignedOut>
               <ClearUserCookie />

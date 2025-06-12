@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 // define the Schemas
-
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -22,6 +21,7 @@ const userSchema = new mongoose.Schema({
     session: [
         {
             title: String,
+            finalSummary: Boolean,
             date: {
                 type: Date,
                 default: Date.now
@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema({
         }
     ]
 }, { 
-    strict: "throw",
     timestamps: true 
 });
 
