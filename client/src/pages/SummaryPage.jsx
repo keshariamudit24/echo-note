@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useUser } from "@clerk/clerk-react";
+import  TextToSpeech  from './TTS'
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 
@@ -92,6 +93,7 @@ function SummaryPage() {
           <div className="px-6 py-8">
             <article className="prose prose-blue lg:prose-lg max-w-none">
               <ReactMarkdown>{summary}</ReactMarkdown>
+              <TextToSpeech text={summary}/>
             </article>
           </div>
           
