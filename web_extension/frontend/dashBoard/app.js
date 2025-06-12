@@ -1,4 +1,4 @@
-import { uploadScreenShot,getSessionId } from './api.js';
+import summarizeData, { uploadScreenShot,getSessionId } from './api.js';
 
 const recordButton = document.getElementById('recordButton');
 
@@ -92,8 +92,8 @@ async function toggleRecording() {
     }
 
     if(!sessionId){
-        //fetch sessio id using email
-        sessionId = await getSessionId(userEmail,titleInput.value);
+        //fetch session id using email
+        sessionId = await getSessionId(userEmail, titleInput.value);
     }
 
     if (!isRecording && sessionId) {
@@ -196,7 +196,7 @@ function captureScreenshot(videoElement, userEmail, sessionId) {
 
 
 
-function stopRecordingScreenshots() {
+async function stopRecordingScreenshots() {
     isRecording = false;
     clearInterval(timerInterval);
     clearInterval(screenshotInterval);
@@ -207,5 +207,16 @@ function stopRecordingScreenshots() {
 
     updateUi(false);
     updateTitleField(false);
+
+    // you want the summary to be stored in the db
+    // post
+    try {
+        await summarizeData(userEmail, sessionId);
+        console.log('Recording session ended successfully');
+        sessionId = null;
+    } catch (error) {
+        console.error('Failed to end recording session:', error);
+        alert('Error saving recording session');
+    }
 }
 
