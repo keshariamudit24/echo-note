@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useUser } from "@clerk/clerk-react";
-import SetUserCookie from '../components/SetUserCookie';
+import { SetUserCookie } from '../components/cookieFunctions';
 import ReactMarkdown from 'react-markdown';
 
 function Dashboard() {

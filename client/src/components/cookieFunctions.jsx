@@ -37,4 +37,4 @@ const ClearUserCookie = ()=> {
   return null; // this component does not render anything
 }
 
-export {SetUserCookie,ClearUserCookie};
+export { SetUserCookie, ClearUserCookie};
