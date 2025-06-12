@@ -2,12 +2,6 @@ const mongoose = require('mongoose');
 
 // define the Schemas
 
-const screenshotSchema = new mongoose.Schema({
-  userId: String,
-  timestamp: Date,
-  image: String 
-});
-
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -53,10 +47,6 @@ userSchema.statics.createFromClerk = async function(clerkUser) {
 
 // create models
 const UserModel = mongoose.model("user", userSchema);
-const ScreenshotModel = mongoose.model("screenshot", screenshotSchema)
 
 // export 
-module.exports = {
-    UserModel,
-    ScreenshotModel
-};
+module.exports = UserModel
