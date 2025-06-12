@@ -65,8 +65,15 @@ imgOcr.post('/ocr', expressAsyncHandler(async (req, res) => {
     // console.log("Request body: ", req.body);
 
     console.log("Session Id: ",sessionId)
+
+    
     // find the user having this userEmail
     const currUser = await UserModel.findOne({ email: userEmail });
+
+    const targetSession = currUser.session.id(sessionId);
+    if (!targetSession) {
+        return res.status(404).send({ msg: 'Session not found' });
+    }
 
     // perform OCR
     console.log("OCR start");
@@ -83,10 +90,6 @@ imgOcr.post('/ocr', expressAsyncHandler(async (req, res) => {
 
 
     // store the summary in the database 
-    const targetSession = currUser.session.id(sessionId);
-    if (!targetSession) {
-        return res.status(404).send({ msg: 'Session not found' });
-    }
     
     console.log(extractedText);
     targetSession.summary += extractedText
