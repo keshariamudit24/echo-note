@@ -18,7 +18,7 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 
-app.use('/user', requireAuth, userRoute)
+app.use('/user', userRoute)
 app.use('/extension', extRoute)
 app.use('/auth', authRoute)
 app.use('/screenshot', imgOcr)
