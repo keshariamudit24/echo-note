@@ -8,6 +8,7 @@ function SummaryPage() {
   const { sessionId } = useParams();
   const { user } = useUser();
   const [summary, setSummary] = useState(null);
+  const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -20,8 +21,9 @@ function SummaryPage() {
         const response = await axios.post(`http://localhost:3000/user/generate-summary/${sessionId}`, {
           email: user.primaryEmailAddress.emailAddress
         });
-        
-        setSummary(response.data);
+
+        setSummary(response.data.summary);
+        setTitle(response.data.title)
         setLoading(false);
       } catch (err) {
         console.error("Error fetching summary:", err);
@@ -83,19 +85,13 @@ function SummaryPage() {
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           <div className="border-b border-gray-200 px-6 py-4">
             <p className="text-sm text-gray-500">
-              Session date: {new Date(summary.date).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
+              Session title: {title}
             </p>
           </div>
           
           <div className="px-6 py-8">
             <article className="prose prose-blue lg:prose-lg max-w-none">
-              <ReactMarkdown>{summary.summary}</ReactMarkdown>
+              <ReactMarkdown>{summary}</ReactMarkdown>
             </article>
           </div>
           
