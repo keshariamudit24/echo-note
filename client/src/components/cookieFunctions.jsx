@@ -28,47 +28,13 @@ const SetUserCookie = () => {
   return null; // This component doesn't render anything visible
 };
 
-export default SetUserCookie;
+const ClearUserCookie = ()=> {
+  useEffect(() => {
+    Cookies.remove("my_app_user_name");
+    Cookies.remove("my_app_user_email");
+  }, []);
 
-// import React, { useEffect } from 'react';
-// import { useUser } from '@clerk/clerk-react';
-// import Cookies from 'js-cookie';
+  return null; // this component does not render anything
+}
 
-// const SetUserCookie = () => {
-//   const { user, isSignedIn } = useUser();
-
-//   useEffect(() => {
-//     const saveUserToDatabase = async () => {
-//       // Only proceed if user is signed in and we have user data
-//       if (isSignedIn && user) {
-//         try {
-//           // Send only email and firstName to the database
-//           const response = await fetch('http://localhost:3000/auth/signup', {
-//             method: 'POST',
-//             headers: {
-//               'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//               email: user.primaryEmailAddress?.emailAddress,
-//               firstName: user.firstName
-//             })
-//           });
-
-//           if (response.ok) {
-//             console.log('User saved to database successfully');
-//           } else {
-//             console.error('Failed to save user to database');
-//           }
-//         } catch (error) {
-//           console.error('Error saving user:', error);
-//         }
-//       }
-//     };
-
-//     saveUserToDatabase();
-//   }, [isSignedIn, user]);
-
-//   return null;
-// };
-
-// export default SetUserCookie;
+export {SetUserCookie,ClearUserCookie};

@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import SetUserCookie from '../components/SetUserCookie';
+import {SetUserCookie} from '../components/cookieFunctions';
 
 function Dashboard() {
   const { isLoaded, isSignedIn, user } = useUser();
