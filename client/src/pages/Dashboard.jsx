@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useUser } from "@clerk/clerk-react";
-import {SetUserCookie} from '../components/cookieFunctions';
-import ReactMarkdown from 'react-markdown';
+import { useNavigate } from 'react-router-dom';
+import { SetUserCookie } from '../components/cookieFunctions';
 
 function Dashboard() {
   const { isLoaded, isSignedIn, user } = useUser();
   const [sessions, setSessions] = useState([]);
-  const [selectedSession, setSelectedSession] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isSignedIn && user) {
@@ -25,20 +25,8 @@ function Dashboard() {
     }
   };
 
-  const handleSessionClick = async (sessionId) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`http://localhost:3000/user/generate-summary/${sessionId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user.primaryEmailAddress.emailAddress })
-      });
-      const data = await response.json();
-      setSelectedSession(data);
-    } catch (error) {
-      console.error('Error fetching summary:', error);
-    }
-    setIsLoading(false);
+  const handleSessionClick = (sessionId) => {
+    navigate(`/summary/${sessionId}`);
   };
 
   if (!isLoaded || !isSignedIn) {
@@ -50,27 +38,32 @@ function Dashboard() {
       <SetUserCookie />
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Sessions</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sessions.map((session) => (
-          <div
-            key={session._id}
-            onClick={() => handleSessionClick(session._id)}
-            className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer"
-          >
-            <h3 className="text-lg font-semibold mb-2">{session.title}</h3>
-            <p className="text-gray-500 text-sm">
-              {new Date(session.date).toLocaleDateString()}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {selectedSession && (
-        <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">{selectedSession.title}</h2>
-          <div className="prose max-w-none">
-            <ReactMarkdown>{selectedSession.summary}</ReactMarkdown>
-          </div>
+      {sessions.length === 0 ? (
+        <div className="text-center py-12 bg-white rounded-lg shadow">
+          <p className="text-gray-500 text-lg">You don't have any sessions yet.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sessions.map((session) => (
+            <div
+              key={session._id}
+              onClick={() => handleSessionClick(session._id)}
+              className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer border border-gray-100"
+            >
+              <h3 className="text-lg font-semibold mb-2">{session.title}</h3>
+              <p className="text-gray-500 text-sm">
+                {new Date(session.date).toLocaleDateString()}
+              </p>
+              <div className="mt-4 flex justify-between items-center">
+                <span className={`px-2 py-1 text-xs rounded-full ${session.finalSummary ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                  {session.finalSummary ? 'Ready' : 'Processing'}
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

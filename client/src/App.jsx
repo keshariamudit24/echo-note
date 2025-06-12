@@ -2,8 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ClerkProvider, SignIn, SignUp, SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
+import SummaryPage from './pages/SummaryPage';
 import Navbar from './components/Navbar';
-import { SetUserCookie,ClearUserCookie } from './components/cookieFunctions';
+import { SetUserCookie, ClearUserCookie } from './components/cookieFunctions';
 import { CreateOrCheckUser } from './components/CreateorCheckUser'
 
 
@@ -30,6 +31,19 @@ export default function App() {
                   <>
                     <SignedIn>
                       <Dashboard />
+                    </SignedIn>
+                    <SignedOut>
+                      <RedirectToSignIn />
+                    </SignedOut>
+                  </>
+                }
+              />
+              <Route
+                path="/summary/:sessionId"
+                element={
+                  <>
+                    <SignedIn>
+                      <SummaryPage />
                     </SignedIn>
                     <SignedOut>
                       <RedirectToSignIn />

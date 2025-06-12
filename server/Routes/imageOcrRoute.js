@@ -31,7 +31,6 @@ async function getGeminiSummary(text) {
 async function sendImageToOCRSpace(base64Str) {
   console.log("In ocr func");
   const apiKey = process.env.API_KEY; // replace with your OCR.space API key
-  console.log("API KEY: ", apiKey);
   const base64ImageWithPrefix = `data:image/png;base64,${base64Str}`;
 
   const data = new URLSearchParams();
@@ -50,7 +49,7 @@ async function sendImageToOCRSpace(base64Str) {
     });
 
     // OCR result JSON:
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
 
   } catch (error) {
@@ -92,8 +91,8 @@ imgOcr.post('/ocr', expressAsyncHandler(async (req, res) => {
 
     // store the summary in the database 
     
-    // console.log(ocrData);
-    targetSession.summary += extractedText;
+    console.log(extractedText);
+    targetSession.summary += extractedText
 
     // Save the changes
     await currUser.save();
