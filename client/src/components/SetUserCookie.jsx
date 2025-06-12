@@ -1,4 +1,3 @@
-// src/components/SetUserCookie.jsx
 import React, { useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import Cookies from 'js-cookie'; // If you're using js-cookie
