@@ -1,6 +1,6 @@
 const express = require('express');
 const expressAsyncHandler = require('express-async-handler')
-const {UserModel} = require('../schemas/userSchema')
+const UserModel = require('../schemas/userSchema')
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const imgOcr = express.Router();
 const axios = require('axios')
