@@ -84,7 +84,7 @@ userRoute.post("/generate-summary/:sessionId", expressAsyncHandler(async (req, r
             await user.save();
         }
         
-        res.json({ summary: session.summary });
+        res.json({ summary: session.summary, title: session.title });
     } catch (error) {
         res.status(500).json({ message: "Error generating summary" });
     }
