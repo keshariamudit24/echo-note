@@ -8,7 +8,7 @@ import SetUserCookie from './components/SetUserCookie';
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-function App() {
+export default function App() {
   return (
     <ClerkProvider publishableKey={clerkPubKey}>
       <Router>
